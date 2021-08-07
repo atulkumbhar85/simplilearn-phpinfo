@@ -1,12 +1,10 @@
-# simplilearn-phpinfo
-
-```
-GITHUB_USERNAME=atulkumbhar85
+GITHUB_USERNAME=academiaonline
 GITHUB_PROJECT=simplilearn-phpinfo
-GITHUB_BRANCH=2021-08-06
+GITHUB_BRANCH=2021-08
 GITHUB_RELEASE=single-line
 NODEPORT=80
 
+cd ${HOME}
 git clone https://github.com/${GITHUB_USERNAME}/${GITHUB_PROJECT}
 cd ${GITHUB_PROJECT}
 git pull
@@ -39,4 +37,12 @@ docker container logs ${GITHUB_PROJECT}_${GITHUB_RELEASE}
 docker container top ${GITHUB_PROJECT}_${GITHUB_RELEASE} 
 docker container stats --no-stream ${GITHUB_PROJECT}_${GITHUB_RELEASE}
 
-```
+GITHUB_RELEASE=no-volume-metadata
+NODEPORT=82
+
+docker image build --file Dockerfile-${GITHUB_RELEASE} --tag ${GITHUB_USERNAME}/${GITHUB_PROJECT}:${GITHUB_RELEASE} ./
+docker container run --cpus 0.050 --detach --memory 10M --name ${GITHUB_PROJECT}_${GITHUB_RELEASE} --publish ${NODEPORT}:8080 --read-only --rm ${GITHUB_USERNAME}/${GITHUB_PROJECT}:${GITHUB_RELEASE}
+
+docker container logs ${GITHUB_PROJECT}_${GITHUB_RELEASE} 
+docker container top ${GITHUB_PROJECT}_${GITHUB_RELEASE} 
+docker container stats --no-stream ${GITHUB_PROJECT}_${GITHUB_RELEASE}
